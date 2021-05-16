@@ -17,8 +17,13 @@ def main():
         )
         for line in stdout:
             j = json.loads(line)
-            events.create_event(j["type"])
-            # print(j["type"])
+            event = events.create_event(j)
+            if event is None:
+                continue
+
+            s = event.to_string()
+            if s is not None:
+                print(s)
     finally:
         client.close()
 

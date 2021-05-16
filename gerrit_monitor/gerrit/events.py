@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from gerrit import structures
 
 
 class Event(ABC):
@@ -10,109 +11,111 @@ class Event(ABC):
         pass
 
 
-class AssigneeChanged:
+class AssigneeChanged(Event):
     def to_string(self):
         pass
 
 
-class ChangeAbandoned:
+class ChangeAbandoned(Event):
     def to_string(self):
         pass
 
 
-class ChangeDeleted:
+class ChangeDeleted(Event):
     def to_string(self):
         pass
 
 
-class ChangeMerged:
+class ChangeMerged(Event):
     def to_string(self):
         pass
 
 
-class ChangeRestored:
+class ChangeRestored(Event):
     def to_string(self):
         pass
 
 
-class CommentAdded:
+class CommentAdded(Event):
+    def to_string(self):
+        change = structures.Change(self.json["change"])
+        return change.topic
+
+
+class DroppedOutput(Event):
     def to_string(self):
         pass
 
 
-class DroppedOutput:
+class HashtagsChanged(Event):
     def to_string(self):
         pass
 
 
-class HashtagsChanged:
+class ProjectCreated(Event):
     def to_string(self):
         pass
 
 
-class ProjectCreated:
+class PatchsetCreated(Event):
     def to_string(self):
         pass
 
 
-class PatchsetCreated:
+class RefReplicated(Event):
     def to_string(self):
         pass
 
 
-class RefReplicated:
+class RefReplicationDone(Event):
     def to_string(self):
         pass
 
 
-class RefReplicationDone:
+class RefReplicationScheduled(Event):
     def to_string(self):
         pass
 
 
-class RefReplicationScheduled:
+class RefUpdated(Event):
     def to_string(self):
         pass
 
 
-class RefUpdated:
+class ReviewerAdded(Event):
     def to_string(self):
         pass
 
 
-class ReviewerAdded:
+class ReviewerDeleted(Event):
     def to_string(self):
         pass
 
 
-class ReviewerDeleted:
+class TopicChanged(Event):
     def to_string(self):
         pass
 
 
-class TopicChanged:
+class VoteDeleted(Event):
     def to_string(self):
         pass
 
 
-class VoteDeleted:
+class WipStateChanged(Event):
     def to_string(self):
         pass
 
 
-class WipStateChanged:
+class PrivateStateChanged(Event):
     def to_string(self):
         pass
 
 
-class PrivateStateChanged:
-    def to_string(self):
-        pass
-
-
-def create_event(gerrit_type):
-    if gerrit_type in _events_map:
-        return _events_map[gerrit_type]()
+def create_event(json):
+    event_type = json["type"]
+    if event_type in _events_map:
+        return _events_map[event_type](json)
 
 
 _events_map = {
