@@ -1,5 +1,4 @@
 import paramiko
-import json
 from gerrit import events
 
 
@@ -16,14 +15,20 @@ def main():
             "cat tmp/gerrit_json_events"
         )
         for line in stdout:
-            j = json.loads(line)
-            event = events.create_event(j)
+            event = events.create_event(line)
             if event is None:
                 continue
 
             s = event.to_string()
-            if s is not None:
-                print(s)
+            try:
+                print(event.id)
+            except KeyError as e:
+                if s is not None:
+                    print(s)
+                else:
+                    print("No text")
+                return
+
     finally:
         client.close()
 

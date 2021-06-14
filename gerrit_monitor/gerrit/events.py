@@ -1,121 +1,112 @@
+import json
 from abc import ABC, abstractmethod
 from gerrit import structures
 
 
 class Event(ABC):
-    def __init__(self, json):
-        self.json = json
+    def __init__(self, json_data):
+        self.json_data = json_data
+        # print(json_data["type"])
+        # self.change = structures.Change(self.json_data["change"])
 
-    @abstractmethod
+    # @abstractmethod
     def to_string(self):
-        pass
+        # print(json.dumps(self.json_data))
+        return json.dumps(self.json_data)
+
+    @property
+    def id(self):
+        return self.json_data["change"]["id"]
 
 
 class AssigneeChanged(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class ChangeAbandoned(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class ChangeDeleted(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class ChangeMerged(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class ChangeRestored(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class CommentAdded(Event):
-    def to_string(self):
-        change = structures.Change(self.json["change"])
-        return change.topic
+    pass
 
 
 class DroppedOutput(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class HashtagsChanged(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class ProjectCreated(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class PatchsetCreated(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class RefReplicated(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class RefReplicationDone(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class RefReplicationScheduled(Event):
-    def to_string(self):
-        pass
+    pass
 
 
+# TODO: Ignore for now, has no associated change
 class RefUpdated(Event):
-    def to_string(self):
-        pass
+    @property
+    def id(self):
+        return None
 
 
 class ReviewerAdded(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class ReviewerDeleted(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class TopicChanged(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class VoteDeleted(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class WipStateChanged(Event):
-    def to_string(self):
-        pass
+    pass
 
 
 class PrivateStateChanged(Event):
-    def to_string(self):
-        pass
+    pass
 
 
-def create_event(json):
-    event_type = json["type"]
+def create_event(line):
+    json_data = json.loads(line)
+    event_type = json_data["type"]
     if event_type in _events_map:
-        return _events_map[event_type](json)
+        return _events_map[event_type](json_data)
 
 
 _events_map = {
@@ -129,7 +120,7 @@ _events_map = {
     "hashtags-changed": HashtagsChanged,
     "project-created": ProjectCreated,
     "patchset-created": PatchsetCreated,
-    "ref-updated": RefUpdated,
+    # "ref-updated": RefUpdated,
     "reviewer-added": ReviewerAdded,
     "reviewer-deleted": ReviewerDeleted,
     "topic-changed": TopicChanged,
