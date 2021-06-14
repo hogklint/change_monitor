@@ -6,17 +6,17 @@ from gerrit import structures
 class Event(ABC):
     def __init__(self, json_data):
         self.json_data = json_data
-        # print(json_data["type"])
-        # self.change = structures.Change(self.json_data["change"])
 
     # @abstractmethod
     def to_string(self):
-        # print(json.dumps(self.json_data))
         return json.dumps(self.json_data)
 
     @property
     def id(self):
-        return self.json_data["change"]["id"]
+        if "change" in self.json_data and "id" in self.json_data["change"]:
+            return self.json_data["change"]["id"]
+        else:
+            return None
 
 
 class AssigneeChanged(Event):
