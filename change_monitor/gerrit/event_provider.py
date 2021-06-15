@@ -1,9 +1,7 @@
 import paramiko
-from gerrit import events
-from change import Change
 
 
-def main():
+def get_events():
     try:
         client = paramiko.SSHClient()
         client.load_system_host_keys()
@@ -15,25 +13,7 @@ def main():
         stdin, stdout, stderr = client.exec_command(  # nosec
             "cat tmp/gerrit_json_events"
         )
-        event_dict = {}
         for line in stdout:
-            event = events.create_event(line)
-            if event is None:
-                continue
-
-            #s = event.to_string()
-            change = event_dict.get(event.id)
-            if not change:
-                change = Change()
-                event_dict[event.id] = change
-
-            change.add_event(event)
-
-        print(len(event_dict))
-
+            yield line
     finally:
         client.close()
-
-
-if __name__ == "__main__":
-    main()

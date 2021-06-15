@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "gerrit_monitor"
+name = "change_monitor"
 version = "0.1.0"
 description = ""
 authors = ["Jimmie Hogklint <hogklint@gmail.com>"]
