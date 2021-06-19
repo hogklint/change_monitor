@@ -103,7 +103,12 @@ class PrivateStateChanged(Event):
 
 
 def create_event(line):
-    json_data = json.loads(line)
+    try:
+        json_data = json.loads(line)
+    except TypeError as e:
+        print("Invalid JSON event received")
+        return None
+
     event_type = json_data["type"]
     if event_type in _events_map:
         return _events_map[event_type](json_data)
