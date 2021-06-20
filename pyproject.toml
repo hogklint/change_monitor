@@ -9,6 +9,9 @@ python = "^3.8"
 paramiko = "^2.7.2"
 gevent = "^21.1.2"
 
+[tool.poetry.scripts]
+change_monitor = "change_monitor:main"
+
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 

@@ -1,6 +1,7 @@
 import json
-from abc import ABC, abstractmethod
-from gerrit import structures
+from abc import ABC
+
+# from . import structures
 
 
 class Event(ABC):
@@ -106,7 +107,7 @@ def create_event(line):
     try:
         json_data = json.loads(line)
     except TypeError as e:
-        print("Invalid JSON event received")
+        print("Invalid JSON event received:", e)
         return None
 
     event_type = json_data["type"]

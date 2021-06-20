@@ -1,15 +1,17 @@
 import gevent
-from gerrit import events
+from .gerrit import events
+from .change import Change
 
 event_dict = {}
 event_queue = gevent.queue.Queue()
+
 
 def handle_events():
     global event_queue
     global event_dict
 
     for line in event_queue:
-        #print(line)
+        # print(line)
         event = events.create_event(line)
         if event is None:
             continue
